@@ -29,7 +29,7 @@ func main() {
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
 	r.Post("/login", handlers.Login)
-	r.Post("/project", handlers.CreateProject)
+	r.Post("/project", handlers.MiddlewareJWT(handlers.CreateProject))
 	r.Get("/project", handlers.GetProjects)
 
 	fmt.Println("http://localhost:8080")
