@@ -23,3 +23,22 @@ func (r *Repository) InsertNewProject(project model.Project) error {
 	}
 	return nil
 }
+
+func (r *Repository) GetAllProjects() ([]model.Project, error) {
+	rows, err := r.db.Query(`SELECT projects.project_id, projects.title, projects.description, projects.github_link, projects.image, projects.created_at, projects.updated_at, users.username 
+	FROM projects 
+	JOIN users ON projects.user_id = users.user_id`)
+	defer rows.Close()
+	if err != nil {
+		return nil, err
+	}
+	var result []model.Project
+	for rows.Next() {
+		var project model.Project
+		if err := rows.Scan(&project.ID, &project.Title, &project.Description, &project.GithubLink, &project.Image, &project.Created, &project.Updated, &project.Author); err != nil {
+			return nil, err
+		}
+		result = append(result, project)
+	}
+	return result, nil
+}

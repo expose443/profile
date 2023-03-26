@@ -3,6 +3,7 @@ package model
 import "time"
 
 type Project struct {
+	ID          int       `json:"project_id"`
 	Title       string    `json:"title"`
 	Description string    `json:"description"`
 	Author      string    `json:"author"`

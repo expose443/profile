@@ -9,7 +9,7 @@ import (
 	"github.com/with-insomnia/profile/internal/model"
 )
 
-func (h *Handlers) Projects(w http.ResponseWriter, r *http.Request) {
+func (h *Handlers) CreateProject(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		ErrorHandler(w, http.StatusMethodNotAllowed)
 		return
@@ -28,4 +28,17 @@ func (h *Handlers) Projects(w http.ResponseWriter, r *http.Request) {
 		ErrorHandler(w, http.StatusInternalServerError)
 		return
 	}
+}
+
+func (h *Handlers) GetProjects(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		ErrorHandler(w, http.StatusMethodNotAllowed)
+		return
+	}
+	projects, err := h.repo.GetAllProjects()
+	if err != nil {
+		ErrorHandler(w, http.StatusInternalServerError)
+		return
+	}
+	fmt.Println(projects)
 }
