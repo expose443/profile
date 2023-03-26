@@ -28,6 +28,8 @@ func (h *Handlers) CreateProject(w http.ResponseWriter, r *http.Request) {
 		ErrorHandler(w, http.StatusInternalServerError)
 		return
 	}
+	w.WriteHeader(http.StatusOK)
+	return
 }
 
 func (h *Handlers) GetProjects(w http.ResponseWriter, r *http.Request) {
@@ -40,5 +42,11 @@ func (h *Handlers) GetProjects(w http.ResponseWriter, r *http.Request) {
 		ErrorHandler(w, http.StatusInternalServerError)
 		return
 	}
-	fmt.Println(projects)
+	w.Header().Set("Content-Type", "application/json")
+	err = json.NewEncoder(w).Encode(projects)
+	if err != nil {
+		ErrorHandler(w, http.StatusInternalServerError)
+		return
+	}
+	return
 }
