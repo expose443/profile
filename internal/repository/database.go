@@ -20,8 +20,8 @@ type Repository struct {
 	db *sql.DB
 }
 
-func NewRepository(db *sql.DB) Repository {
-	return Repository{
+func NewRepository(db *sql.DB) *Repository {
+	return &Repository{
 		db: db,
 	}
 }
@@ -33,7 +33,6 @@ func InstancePostgres(cfg *config.PostgresInfo) (*sql.DB, error) {
 	if err != nil {
 		return nil, err
 	}
-	defer db.Close()
 	err = db.Ping()
 	if err != nil {
 		return nil, err
@@ -47,13 +46,25 @@ func InstancePostgres(cfg *config.PostgresInfo) (*sql.DB, error) {
 
 func createTable(db *sql.DB) error {
 	user := `CREATE TABLE IF NOT EXISTS users(
-		user_id SERIAL,
+		user_id SERIAL PRIMARY KEY,
 		username VARCHAR(60) NOT NULL,
 		password VARCHAR NOT NULL
-	)`
+	);`
 
+	project := `CREATE TABLE IF NOT EXISTS projects(
+		project_id SERIAL,
+		title TEXT NOT NULL,
+		description TEXT NOT NULL,
+		github_link TEXT NOT NULL,
+		image TEXT NOT NULL,
+		created_at TIMESTAMP NOT NULL, 
+		updated_at TIMESTAMP NOT NULL,
+		user_id INT NOT NULL,
+		CONSTRAINT FK_User FOREIGN KEY(user_id)
+			REFERENCES users(user_id)
+	);`
 	query := []string{}
-	query = append(query, user)
+	query = append(query, user, project)
 	for _, v := range query {
 
 		_, err := db.Exec(v)

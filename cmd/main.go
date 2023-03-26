@@ -20,6 +20,7 @@ func main() {
 		fmt.Println(err)
 		return
 	}
+	defer db.Close()
 	repo := repository.NewRepository(db)
 	handlers := transport.NewHandler(repo)
 	http.HandleFunc("/login", handlers.Login)

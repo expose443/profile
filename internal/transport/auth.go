@@ -9,9 +9,9 @@ import (
 	"github.com/with-insomnia/profile/internal/repository"
 )
 
-func NewHandler(repo repository.Repository) Handlers {
-	return Handlers{
-		repo: repo,
+func NewHandler(repo *repository.Repository) *Handlers {
+	return &Handlers{
+		repo: *repo,
 	}
 }
 
