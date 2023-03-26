@@ -41,8 +41,9 @@ func (h *Handlers) MiddlewareJWT(next http.HandlerFunc) http.HandlerFunc {
 			return
 		}
 		tokenStr := cookie.Value
-		claims := jwt.StandardClaims{}
+		claims := Claims{}
 		tkn, err := jwt.ParseWithClaims(tokenStr, &claims, key)
+		fmt.Println("CLAIMS", claims)
 		if err != nil {
 			if err == jwt.ErrSignatureInvalid {
 				ErrorHandler(w, http.StatusUnauthorized)
