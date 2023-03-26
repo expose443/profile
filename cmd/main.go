@@ -16,6 +16,7 @@ func main() {
 	cfg, err := config.Init("config.json")
 	if err != nil {
 		fmt.Println(err)
+		return
 	}
 	db, err := repository.InstancePostgres(&cfg.PostgresInfo)
 	if err != nil {
