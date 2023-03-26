@@ -1,25 +1,25 @@
 package transport
 
 import (
-	"database/sql"
 	"encoding/json"
 	"fmt"
 	"net/http"
 
 	"github.com/with-insomnia/profile/internal/model"
+	"github.com/with-insomnia/profile/internal/repository"
 )
 
-func NewHandler(db *sql.DB) Handlers {
+func NewHandler(repo repository.Repository) Handlers {
 	return Handlers{
-		db: db,
+		repo: repo,
 	}
 }
 
 type Handlers struct {
-	db *sql.DB
+	repo repository.Repository
 }
 
-func (h *Handlers) Register(w http.ResponseWriter, r *http.Request) {
+func (h *Handlers) Login(w http.ResponseWriter, r *http.Request) {
 	var credintails model.Credintails
 	err := json.NewDecoder(r.Body).Decode(&credintails)
 	if err != nil {

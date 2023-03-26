@@ -16,6 +16,16 @@ const (
 	dbname   = "profile"
 )
 
+type Repository struct {
+	db *sql.DB
+}
+
+func NewRepository(db *sql.DB) Repository {
+	return Repository{
+		db: db,
+	}
+}
+
 func InstancePostgres(cfg *config.PostgresInfo) (*sql.DB, error) {
 	postgresInfo := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable",
 		cfg.Host, cfg.Port, cfg.User, cfg.Password, cfg.Dbname)
@@ -45,10 +55,16 @@ func createTable(db *sql.DB) error {
 	query := []string{}
 	query = append(query, user)
 	for _, v := range query {
+
 		_, err := db.Exec(v)
 		if err != nil {
 			return err
 		}
+	}
+	query1 := `INSERT INTO users(username, password) VALUES($1, $2)`
+	_, err := db.Exec(query1, "abdu", "pass")
+	if err != nil {
+		return err
 	}
 	return nil
 }

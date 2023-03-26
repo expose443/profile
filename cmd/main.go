@@ -20,8 +20,10 @@ func main() {
 		fmt.Println(err)
 		return
 	}
-	handlers := transport.NewHandler(db)
-	http.HandleFunc("/register", handlers.Register)
+	repo := repository.NewRepository(db)
+	handlers := transport.NewHandler(repo)
+	http.HandleFunc("/login", handlers.Login)
+	http.HandleFunc("/projects", handlers.Projects)
 	fmt.Println("http://localhost:8080")
 	log.Fatal(http.ListenAndServe(cfg.HttpServer.Port, nil))
 }
