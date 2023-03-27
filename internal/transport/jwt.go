@@ -45,11 +45,7 @@ func (h *Handlers) MiddlewareJWT(next http.HandlerFunc) http.HandlerFunc {
 		tkn, err := jwt.ParseWithClaims(tokenStr, &claims, key)
 		fmt.Println("CLAIMS", claims)
 		if err != nil {
-			if err == jwt.ErrSignatureInvalid {
-				ErrorHandler(w, http.StatusUnauthorized)
-				return
-			}
-			ErrorHandler(w, http.StatusBadRequest)
+			ErrorHandler(w, http.StatusUnauthorized)
 			return
 		}
 		if !tkn.Valid {

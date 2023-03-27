@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/with-insomnia/profile/internal/model"
+	"github.com/with-insomnia/profile/internal/repository"
 )
 
 func (h *Handlers) CreateProject(w http.ResponseWriter, r *http.Request) {
@@ -24,6 +25,11 @@ func (h *Handlers) CreateProject(w http.ResponseWriter, r *http.Request) {
 	project.Updated = time.Now()
 	err = h.repo.InsertNewProject(project)
 	if err != nil {
+		if err == repository.ErrNoUser {
+			fmt.Println(err)
+			ErrorHandler(w, http.StatusUnauthorized)
+			return
+		}
 		fmt.Println(err)
 		ErrorHandler(w, http.StatusInternalServerError)
 		return
