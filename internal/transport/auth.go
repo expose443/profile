@@ -46,7 +46,7 @@ func (h *Handlers) Login(w http.ResponseWriter, r *http.Request) {
 	}
 	fmt.Println(token)
 	http.SetCookie(w, &http.Cookie{
-		Name:     "Token",
+		Name:     "jwt_token",
 		Value:    token,
 		HttpOnly: true,
 	})

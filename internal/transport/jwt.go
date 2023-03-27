@@ -19,7 +19,7 @@ type Claims struct {
 }
 
 func GenerateJWT(username string) (string, error) {
-	expiryTime := time.Now().Add(5 * time.Minute)
+	expiryTime := time.Now().Add(120 * time.Minute)
 	claims := Claims{
 		Username: username,
 	}
@@ -34,9 +34,11 @@ func GenerateJWT(username string) (string, error) {
 
 func (h *Handlers) MiddlewareJWT(next http.HandlerFunc) http.HandlerFunc {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		cookie, err := r.Cookie("Token")
+		cookie, err := r.Cookie("jwt_token")
+		fmt.Println(r.Cookies())
 		if err != nil {
 			if err == http.ErrNoCookie {
+				fmt.Println(5)
 				ErrorHandler(w, http.StatusUnauthorized)
 				return
 			}
@@ -48,10 +50,12 @@ func (h *Handlers) MiddlewareJWT(next http.HandlerFunc) http.HandlerFunc {
 		tkn, err := jwt.ParseWithClaims(tokenStr, &claims, key)
 		fmt.Println("CLAIMS", claims)
 		if err != nil {
+			fmt.Println(3)
 			ErrorHandler(w, http.StatusUnauthorized)
 			return
 		}
 		if !tkn.Valid {
+			fmt.Println(4)
 			ErrorHandler(w, http.StatusUnauthorized)
 			return
 		}

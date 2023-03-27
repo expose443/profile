@@ -24,6 +24,7 @@ func (h *Handlers) CreateProject(w http.ResponseWriter, r *http.Request) {
 
 	username, ok := r.Context().Value(keyUser).(string)
 	if !ok {
+		fmt.Println(1)
 		ErrorHandler(w, http.StatusUnauthorized)
 		return
 	}
@@ -35,6 +36,7 @@ func (h *Handlers) CreateProject(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		if err == repository.ErrNoUser {
 			fmt.Println(err)
+			fmt.Println(2)
 			ErrorHandler(w, http.StatusUnauthorized)
 			return
 		}
