@@ -21,6 +21,14 @@ func (h *Handlers) CreateProject(w http.ResponseWriter, r *http.Request) {
 		ErrorHandler(w, http.StatusBadRequest)
 		return
 	}
+
+	username, ok := r.Context().Value(keyUser).(string)
+	if !ok {
+		ErrorHandler(w, http.StatusUnauthorized)
+		return
+	}
+
+	project.Author = username
 	project.Created = time.Now()
 	project.Updated = time.Now()
 	err = h.repo.InsertNewProject(project)

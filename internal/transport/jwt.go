@@ -1,6 +1,7 @@
 package transport
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"time"
@@ -9,6 +10,8 @@ import (
 )
 
 var secretKey = []byte("secret-key")
+
+const keyUser = "username"
 
 type Claims struct {
 	Username string `json:"username"`
@@ -52,8 +55,8 @@ func (h *Handlers) MiddlewareJWT(next http.HandlerFunc) http.HandlerFunc {
 			ErrorHandler(w, http.StatusUnauthorized)
 			return
 		}
-		fmt.Println("valid")
-		next.ServeHTTP(w, r)
+		ctx := context.WithValue(r.Context(), keyUser, claims.Username)
+		next.ServeHTTP(w, r.WithContext(ctx))
 	})
 }
 
