@@ -29,6 +29,7 @@ func main() {
 
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
+	r.Get("/", handlers.Status)
 	r.Post("/login", handlers.Login)
 	r.Post("/project", handlers.MiddlewareJWT(handlers.CreateProject))
 	r.Get("/project", handlers.GetProjects)

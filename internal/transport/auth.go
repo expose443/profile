@@ -19,6 +19,17 @@ type Handlers struct {
 	repo repository.Repository
 }
 
+func (h *Handlers) Status(w http.ResponseWriter, r *http.Request) {
+	status := make(map[string]bool)
+	status["status - ok"] = true
+	w.Header().Set("Content-Type", "application/json")
+	err := json.NewEncoder(w).Encode(&status)
+	if err != nil {
+		ErrorHandler(w, http.StatusInternalServerError)
+		return
+	}
+}
+
 func (h *Handlers) Login(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		ErrorHandler(w, http.StatusMethodNotAllowed)
